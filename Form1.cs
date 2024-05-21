@@ -15,10 +15,17 @@ namespace Urna_Eletronica
     {
         private String candidatoVotado;
         private static System.Timers.Timer aTimer;
-        
+        private List<Candidatos> candidatos = new List<Candidatos>();
+
         public Form1()
         {
             InitializeComponent();
+            var breno = new Candidatos(13,"Breno");
+            var larissa = new Candidatos(25, "Larissa");
+            var armando = new Candidatos(52, "Armando");
+            candidatos.Add(breno);
+            candidatos.Add(larissa);
+            candidatos.Add(armando);
             visor.Text = "Digite o número do candidato \n\r";
         }
 
@@ -90,7 +97,7 @@ namespace Urna_Eletronica
         private void nulo_Click(object sender, EventArgs e)
         {
             visor.Text = "Voto Anulado";
-            candidatoVotado = "nulo";
+            candidatoVotado = "nulo"; 
             
         }
 
@@ -103,17 +110,23 @@ namespace Urna_Eletronica
         private void btOK_Click(object sender, EventArgs e)
         {
             SetTimer();
-            visor.Text = "Voto : " + candidatoVotado;
-            visor.Text = "/n/n VOTO COMPUTADO !!!";
-            
+            var votado = candidatos.FindAll(c => c.numero.ToString() == candidatoVotado);
+            if (votado.Count > 0)
+            {
+                visor.Text = "Voto : " + votado[0].nome;
+                visor.Text += " VOTO COMPUTADO !!!";
+            }
+            else
+                Console.WriteLine(visor.Text = "Voto inválido");
+
             aTimer.Dispose();
-            visor.Text = "Digite o número do candidato \n\r";
+            //visor.Text = "Digite o número do candidato \n\r";
 
         }
         private static void SetTimer()
         {
             // Create a timer with a two second interval.
-            aTimer = new System.Timers.Timer(20000);
+            aTimer = new System.Timers.Timer(2000);
             // Hook up the Elapsed event for the timer. 
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
